@@ -3,7 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const dirPath = path.join(__dirname, 'folder')
-fs.mkdir(dirPath, (err) => {
+fs.mkdir(dirPath, {recursive:true},(err) => {
     if (err) throw new Error(err.message);
 })
 
@@ -16,7 +16,7 @@ for (let i = 1; i <= 5; i++) {
     })
 
     const dirInFolderPath = path.join(__dirname, 'folder', `folder${i}`);
-    fs.mkdir(dirInFolderPath, (err) => {
+    fs.mkdir(dirInFolderPath, {recursive:true}, (err) => {
         if (err) throw new Error(err.message);
     })
 }
