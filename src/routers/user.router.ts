@@ -15,12 +15,21 @@ router.post(
 );
 
 router.get(
-  "/:id",
-  commonMiddleware.isIdValid,
+  "/:userId",
+  commonMiddleware.isIdValid("userId"),
   userMiddleware.getByIdOrThrow,
   userController.getById,
 );
-router.put("/:id", commonMiddleware.isIdValid, userController.updateUser);
-router.delete("/:id", commonMiddleware.isIdValid, userController.deleteUser);
+router.put(
+  "/:userId",
+  commonMiddleware.isIdValid("userId"),
+  commonMiddleware.isBodyValid(UserValidator.update),
+  userController.updateUser,
+);
+router.delete(
+  "/:userId",
+  commonMiddleware.isIdValid("userId"),
+  userController.deleteUser,
+);
 
 export const userRouter = router;

@@ -5,18 +5,20 @@ import mongoose from "mongoose";
 import { ApiError } from "../errors/api.error";
 
 class CommonMiddleware {
-  public async isIdValid(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
+  public isIdValid(param: string) {
+    return (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const id = req.params[param];
 
-      if (!mongoose.isObjectIdOrHexString(id)) {
-        throw new ApiError("Not valid ID", 400);
+        if (!mongoose.isObjectIdOrHexString(id)) {
+          throw new ApiError("Not valid ID", 400);
+        }
+
+        next();
+      } catch (e) {
+        next(e);
       }
-
-      next();
-    } catch (e) {
-      next(e);
-    }
+    };
   }
   public isBodyValid(validator: ObjectSchema) {
     return (req: Request, res: Response, next: NextFunction) => {

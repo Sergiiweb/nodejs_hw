@@ -1,11 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
 
-import { ApiError } from "../errors/api.error";
-import { User } from "../models/User.model";
 import { userService } from "../services/user.service";
 import { IUser } from "../types/user.type";
-import { UserValidator } from "../validators/user.validator";
 
 class UserController {
   public async getAll(
@@ -40,60 +36,34 @@ class UserController {
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<Response<any>> {
+  ): Promise<void> {
     try {
-      const user = await userService.createUser();
+      const user = await userService.createUser(req.body);
 
       res.status(201).json(user);
     } catch (e) {
       next(e);
     }
   }
-
-  public async deleteUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
-      if (!mongoose.isObjectIdOrHexString(id)) {
-        throw new ApiError("Not valid ID", 400);
-      }
-
-      const user = await User.findById(id);
-      if (!user) {
-        throw new ApiError("User not found", 404);
-      }
-
-      const { deletedCount } = await User.deleteOne({ _id: id });
-      if (!deletedCount) {
-        throw new ApiError("User not found", 404);
-      }
-
-      res.sendStatus(204);
-    } catch (e) {
-      next(e);
-    }
-  }
-
   public async updateUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params;
-      if (!mongoose.isObjectIdOrHexString(id)) {
-        throw new ApiError("Not valid ID", 400);
-      }
-
-      const { value, error } = UserValidator.update.validate(req.body);
-      if (error) {
-        throw new ApiError(error.message, 400);
-      }
-
-      const user = await User.findByIdAndUpdate(id, value, {
-        returnDocument: "after",
-      });
-
-      if (!user) {
-        throw new ApiError("User not found", 404);
-      }
+      const user = await userService.updateUser(req.params.userId, req.body);
 
       res.status(201).json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async deleteUser(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      await userService.deleteUser(req.params.userId);
+
+      res.sendStatus(204);
     } catch (e) {
       next(e);
     }
