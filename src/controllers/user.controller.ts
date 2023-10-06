@@ -32,19 +32,19 @@ class UserController {
     }
   }
 
-  public async createUser(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const user = await userService.createUser(req.body);
-
-      res.status(201).json(user);
-    } catch (e) {
-      next(e);
-    }
-  }
+  // public async createUser(
+  //   req: Request,
+  //   res: Response,
+  //   next: NextFunction,
+  // ): Promise<void> {
+  //   try {
+  //     const user = await userService.createUser(req.body);
+  //
+  //     res.status(201).json(user);
+  //   } catch (e) {
+  //     next(e);
+  //   }
+  // }
   public async updateUser(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await userService.updateUser(req.params.userId, req.body);
