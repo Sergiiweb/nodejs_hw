@@ -48,7 +48,10 @@ class AuthService {
     refreshToken: string,
   ): Promise<ITokensPair> {
     try {
-      const tokensPair = tokenService.generateTokenPair(payload);
+      const tokensPair = tokenService.generateTokenPair({
+        userId: payload.userId,
+        name: payload.name,
+      });
 
       await Promise.all([
         tokenRepository.create({ ...tokensPair, _userId: payload.userId }),
