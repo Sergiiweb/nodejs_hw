@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
+import { emailService } from "../services/email.service";
 import { userService } from "../services/user.service";
 import { IUser } from "../types/user.type";
 
@@ -11,6 +12,8 @@ class UserController {
   ): Promise<Response<IUser[]>> {
     try {
       const users = await userService.getAll();
+
+      await emailService.sendMail("sergii.web@gmail.com");
 
       return res.json(users);
     } catch (e) {
