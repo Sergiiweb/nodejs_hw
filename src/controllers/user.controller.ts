@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import { EEmailAction } from "../enums/email.action.enum";
-import { emailService } from "../services/email.service";
 import { userService } from "../services/user.service";
 import { IUser } from "../types/user.type";
 
