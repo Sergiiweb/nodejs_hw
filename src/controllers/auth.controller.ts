@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { authService } from "../services/auth.service";
 import { ITokenPayload, ITokensPair } from "../types/token.types";
-import { IUser } from "../types/user.type";
+import { ISetNewPassword, IUser } from "../types/user.type";
 
 class AuthController {
   public async register(
@@ -142,6 +142,23 @@ class AuthController {
       );
 
       return res.sendStatus(200);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async setNewPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<void>> {
+    try {
+      const body = req.body as ISetNewPassword;
+      const tokenPayload = req.res.locals.tokenPayload as ITokenPayload;
+
+      await authService.setNewPassword(body, tokenPayload.userId);
+
+      return res.sendStatus(204);
     } catch (e) {
       next(e);
     }

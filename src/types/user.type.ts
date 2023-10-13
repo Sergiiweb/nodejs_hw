@@ -13,3 +13,7 @@ export interface IUser extends Document {
 }
 
 export type IUserCredentials = Pick<IUser, "email" | "password">;
+
+export interface ISetNewPassword extends Pick<IUser, "email" | "password"> {
+  newPassword: string;
+}
