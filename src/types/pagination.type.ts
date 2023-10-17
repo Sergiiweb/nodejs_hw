@@ -5,3 +5,10 @@ export interface IQuery {
 
   [key: string]: string;
 }
+
+export interface IPaginationResponse<T> {
+  page: number;
+  limit: number;
+  itemsFound: number;
+  data: T[];
+}
