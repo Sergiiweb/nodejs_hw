@@ -1,10 +1,34 @@
 import { ApiError } from "../errors/api.error";
+import { User } from "../models/User.model";
 import { userRepository } from "../repositories/user.repository";
+import { IQuery } from "../types/pagination.type";
 import { IUser } from "../types/user.type";
 
 class UserService {
   public async getAll(): Promise<IUser[]> {
     return await userRepository.getAll();
+  }
+
+  public async getAllWithPagination(query: IQuery): Promise<IUser[]> {
+    try {
+      const {
+        page = 1,
+        limit = 5,
+        sortedBy = "createdAt",
+        ...searchObject
+      } = query;
+
+      const skip = +limit * (+page - 1);
+
+      const users = await User.find(searchObject)
+        .limit(+limit)
+        .skip(skip)
+        .sort(sortedBy);
+
+      return users;
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
   }
 
   // public async createUser(dto: IUser): Promise<IUser> {
