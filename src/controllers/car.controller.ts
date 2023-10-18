@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { carService } from "../services/car.service";
 import { ICar } from "../types/car.type";
+import { ITokenPayload } from "../types/token.types";
 
 class CarController {
   public async getAll(
@@ -38,7 +39,9 @@ class CarController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const car = await carService.createCar(req.body);
+      const { userId } = req.res.locals.tokenPayload as ITokenPayload;
+
+      const car = await carService.createCar(req.body, userId);
 
       res.status(201).json(car);
     } catch (e) {
@@ -47,7 +50,13 @@ class CarController {
   }
   public async updateCar(req: Request, res: Response, next: NextFunction) {
     try {
-      const car = await carService.updateCar(req.params.carId, req.body);
+      const { userId } = req.res.locals.tokenPayload as ITokenPayload;
+
+      const car = await carService.updateCar(
+        req.params.carId,
+        req.body,
+        userId,
+      );
 
       res.status(201).json(car);
     } catch (e) {
@@ -61,7 +70,9 @@ class CarController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      await carService.deleteCar(req.params.carId);
+      const { userId } = req.res.locals.tokenPayload as ITokenPayload;
+
+      await carService.deleteCar(req.params.carId, userId);
 
       res.sendStatus(204);
     } catch (e) {
