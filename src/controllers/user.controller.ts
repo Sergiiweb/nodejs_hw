@@ -92,6 +92,22 @@ class UserController {
       next(e);
     }
   }
+
+  public async uploadAvatar(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { userId } = req.res.locals.tokenPayload as ITokenPayload;
+
+      const user = await userService.getMe(userId);
+
+      res.json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const userController = new UserController();

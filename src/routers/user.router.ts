@@ -13,11 +13,6 @@ router.get(
   commonMiddleware.isQueryValid(5, "createdAt"),
   userController.getAll,
 );
-// router.post(
-//   "/",
-//   commonMiddleware.isBodyValid(UserValidator.create),
-//   userController.createUser,
-// );
 
 router.get("/me", authMiddleware.checkAccessToken, userController.getMe);
 
@@ -41,5 +36,6 @@ router.delete(
   commonMiddleware.isIdValid("userId"),
   userController.deleteUser,
 );
+router.post("/:userId/avatar", userController.uploadAvatar);
 
 export const userRouter = router;
