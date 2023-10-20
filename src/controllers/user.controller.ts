@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 
+import { userPresenter } from "../presenters/user.presenter";
 import { userService } from "../services/user.service";
 import { IQuery } from "../types/pagination.type";
 import { ITokenPayload } from "../types/token.types";
@@ -97,11 +99,16 @@ class UserController {
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<void> {
+  ): Promise<Response<IUser>> {
     try {
-      console.log(req.files.avatar);
+      const { userId } = req.params;
+      const avatar = req.files.avatar as UploadedFile;
 
-      res.sendStatus(200);
+      const user = await userService.uploadAvatar(avatar, userId);
+
+      const response = userPresenter.present(user);
+
+      return res.json(response);
     } catch (e) {
       next(e);
     }
