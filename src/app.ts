@@ -5,9 +5,7 @@ import * as swaggerUi from "swagger-ui-express";
 
 import { configs } from "./configs/config";
 import { cronRunner } from "./crons";
-import { authRouter } from "./routers/auth.router";
-import { carRouter } from "./routers/car.router";
-import { userRouter } from "./routers/user.router";
+import { authRouter, carRouter, userRouter } from "./routers";
 import * as swaggerJson from "./utils/swagger.json";
 
 const app = express();
