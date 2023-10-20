@@ -99,11 +99,9 @@ class UserController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { userId } = req.res.locals.tokenPayload as ITokenPayload;
+      console.log(req.files.avatar);
 
-      const user = await userService.getMe(userId);
-
-      res.json(user);
+      res.sendStatus(200);
     } catch (e) {
       next(e);
     }
